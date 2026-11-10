@@ -5,7 +5,7 @@
 **Live:** https://airdriverv-cloud.github.io/planda-ny-landing/  
 **Repo:** https://github.com/airdriverv-cloud/planda-ny-landing
 
-![Первый экран](assets/img/hero.jpg)
+![Первый экран](preview.jpg)
 
 ## Стек
 
