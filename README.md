@@ -2,6 +2,9 @@
 
 Премиальный одностраничный лендинг для event-агентства PLANDA. Сделан по ТЗ `tz-lending-ny-korporativ` и аудиту 20 конкурентов.
 
+**Live:** https://airdriverv-cloud.github.io/planda-ny-landing/  
+**Repo:** https://github.com/airdriverv-cloud/planda-ny-landing
+
 ![Первый экран](assets/img/hero.jpg)
 
 ## Стек
