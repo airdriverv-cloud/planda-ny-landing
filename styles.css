@@ -172,6 +172,10 @@ img{display:block;max-width:100%}
 .scale__card strong{font-size:34px;line-height:1;letter-spacing:-.05em;font-weight:800}
 .scale__name{font-size:14px;font-weight:700;margin-top:10px}
 .scale__desc{font-size:11px;line-height:1.45;color:var(--muted-dark);margin-top:8px;max-width:210px}
+.scale__price{margin-top:auto;padding-top:20px;font-size:16px;font-weight:800;letter-spacing:-.02em;color:var(--red);display:flex;flex-direction:column;gap:2px}
+.scale__price small{font-size:8px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.scale__card:hover .scale__price{color:#fff}
+.scale__card:hover .scale__price small{color:rgba(255,255,255,.65)}
 .scale__arrow{position:absolute;right:24px;top:24px;font-size:17px;transition:transform .3s}
 .scale__card:hover{background:var(--red);color:#fff}
 .scale__card:hover .scale__num,.scale__card:hover .scale__desc{color:rgba(255,255,255,.75)}
@@ -372,6 +376,7 @@ body.is-menu-open .cookie,body.is-menu-open .mobile-bar{display:none}
 .quiz__consent{display:flex;gap:8px;align-items:flex-start;margin-top:16px;font-size:9px;line-height:1.5;color:var(--muted)}
 .quiz__consent a{text-decoration:underline;text-underline-offset:2px}
 .quiz__error{min-height:16px;margin:8px 0 0;font-size:10px;color:var(--red)}
+.hp{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
 .quiz__nav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:16px;border-top:1px solid var(--line)}
 .quiz__back{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:10px 0}
 .quiz__back:disabled{opacity:.3;cursor:not-allowed}

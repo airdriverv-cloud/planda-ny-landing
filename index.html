@@ -219,6 +219,7 @@
             <strong>до 50</strong>
             <span class="scale__name">Камерный ужин</span>
             <span class="scale__desc">Ресторан, особняк или лофт. Тёплый вечер без пафоса.</span>
+            <span class="scale__price">от 500 000 ₽ <small>минимальный бюджет</small></span>
             <span class="scale__arrow">↗</span>
           </button>
           <button class="scale__card" data-quiz data-guests="100">
@@ -226,6 +227,7 @@
             <strong>50–150</strong>
             <span class="scale__name">Гала с программой</span>
             <span class="scale__desc">Сцена, шоу, награждение, танцпол. Основной формат.</span>
+            <span class="scale__price">от 750 000 ₽ <small>минимальный бюджет</small></span>
             <span class="scale__arrow">↗</span>
           </button>
           <button class="scale__card" data-quiz data-guests="200">
@@ -233,6 +235,7 @@
             <strong>150–300</strong>
             <span class="scale__name">Постановка</span>
             <span class="scale__desc">Режиссёр, техкоманда, несколько зон, спецэффекты.</span>
+            <span class="scale__price">от 1 200 000 ₽ <small>минимальный бюджет</small></span>
             <span class="scale__arrow">↗</span>
           </button>
           <button class="scale__card" data-quiz data-guests="350">
@@ -240,6 +243,7 @@
             <strong>300+</strong>
             <span class="scale__name">Продюсерский проект</span>
             <span class="scale__desc">Мультиплощадка, логистика, пресс-служба, безопасность.</span>
+            <span class="scale__price">от 2 400 000 ₽ <small>минимальный бюджет</small></span>
             <span class="scale__arrow">↗</span>
           </button>
         </div>
@@ -603,6 +607,7 @@
       <div class="quiz__meta"><span id="quizStepLabel">Шаг 1 из 5</span><span>≈ 2 минуты</span></div>
 
       <form id="quizForm" novalidate>
+        <input type="text" id="quizWebsite" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         <div class="quiz__step is-active" data-step="1">
           <h3>Сколько гостей?</h3>
           <p class="quiz__hint">Можно примерно — уточним на звонке.</p>
@@ -684,6 +689,7 @@
     </div>
   </div>
 
+  <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -137,6 +137,10 @@
   const nextBtn = $("#quizNext");
   const quizNav = $("#quizNav");
   const success = $("#quizSuccess");
+  const successTitle = success.querySelector("h3");
+  const successText = success.querySelector("p");
+  const successTitleDefault = successTitle.textContent;
+  const successTextDefault = successText.textContent;
   const errorEl = $("#quizError");
   const globalError = document.createElement("p");
   globalError.className = "quiz__error";
@@ -227,6 +231,8 @@
     $$(".quiz__chips button").forEach(b => b.classList.remove("is-selected"));
     steps.forEach(s => { s.hidden = Number(s.dataset.step) !== 1; s.classList.toggle("is-active", Number(s.dataset.step) === 1); });
     success.hidden = true;
+    successTitle.textContent = successTitleDefault;
+    successText.textContent = successTextDefault;
     quizNav.hidden = false;
     nextBtn.disabled = false;
     nextBtn.textContent = "Дальше →";
@@ -321,7 +327,42 @@
     return "";
   }
 
-  nextBtn.addEventListener("click", () => {
+  function getUtm() {
+    const params = new URLSearchParams(location.search);
+    const utm = {};
+    ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"].forEach(key => {
+      const value = params.get(key);
+      if (value) utm[key] = value.slice(0, 200);
+    });
+    return utm;
+  }
+
+  async function sendLead(payload) {
+    const config = window.PLANDA_CONFIG || {};
+    const autoEndpoint = location.hostname.endsWith(".vercel.app") ? "/api/lead" : "";
+    const endpoint = String(config.leadEndpoint || autoEndpoint).trim();
+    const demo = Boolean(config.demoMode) || new URLSearchParams(location.search).has("demo");
+
+    if (!endpoint) {
+      if (demo) {
+        await new Promise(resolve => setTimeout(resolve, 650));
+        return { ok: true, demo: true };
+      }
+      throw new Error("endpoint_not_configured");
+    }
+
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    let data = {};
+    try { data = await res.json(); } catch (e) { /* non-JSON error page */ }
+    if (!res.ok || !data.ok) throw new Error(data.error || "send_failed");
+    return data;
+  }
+
+  nextBtn.addEventListener("click", async () => {
     const error = validateStep();
     if (error) {
       globalError.textContent = error;
@@ -331,19 +372,48 @@
       showStep(state.step + 1);
       return;
     }
-    // Demo submit. Replace with fetch("/api/lead", ...) on production.
+
+    state.needs = $$(".quiz__needs input:checked").map(i => i.value);
     nextBtn.disabled = true;
     nextBtn.textContent = "Отправляем…";
-    state.needs = $$(".quiz__needs input:checked").map(i => i.value);
-    setTimeout(() => {
+    globalError.textContent = "";
+
+    try {
+      const result = await sendLead({
+        name: state.name,
+        phone: state.phone,
+        company: state.company,
+        guests: state.guests,
+        date: state.date,
+        format: state.format,
+        budget: state.budget,
+        needs: state.needs,
+        consent: true,
+        page: location.href,
+        referrer: document.referrer,
+        utm: getUtm(),
+        website: $("#quizWebsite").value,
+        ts: Date.now()
+      });
+
       state.completed = true;
       steps.forEach(s => s.hidden = true);
       success.hidden = false;
       quizNav.hidden = true;
       progressBar.style.width = "100%";
       stepLabel.textContent = "Готово";
-      console.info("PLANDA demo lead", state);
-    }, 850);
+
+      if (result.demo) {
+        success.querySelector("h3").textContent = "Демо-режим";
+        success.querySelector("p").textContent = "Заявка не отправлена. Подключите leadEndpoint в config.js.";
+      }
+    } catch (err) {
+      nextBtn.disabled = false;
+      nextBtn.textContent = "Отправить заявку →";
+      globalError.textContent = err.message === "endpoint_not_configured"
+        ? "Приём заявок ещё не подключён. Позвоните: +7 (951) 297-04-86."
+        : "Не удалось отправить. Попробуйте ещё раз или позвоните: +7 (951) 297-04-86.";
+    }
   });
 
   backBtn.addEventListener("click", () => {
