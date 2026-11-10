@@ -60,11 +60,17 @@ window.PLANDA_CONFIG = {
 
 Поддерживаемые каналы:
 
-- **Telegram** — `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`.
-- **Email** — `RESEND_API_KEY`, `LEAD_EMAIL_TO`, `LEAD_EMAIL_FROM`.
-- **CRM** — `CRM_WEBHOOK_URL`, опционально `CRM_AUTH_HEADER`.
+- **Telegram** — `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`. Целевой бот: `@vik_dsh_agent_bot`, chat_id владельца: `800016103`.
+- **Email** — `RESEND_API_KEY`, `LEAD_EMAIL_TO=airdrivwe@ya.ru`, `LEAD_EMAIL_FROM`.
+- **CRM** — `CRM_WEBHOOK_URL` (Make/n8n/amoCRM) или `BITRIX24_WEBHOOK_URL` (входящий вебхук Bitrix24 с методом `crm.lead.add`).
 
 Функция проверяет имя, телефон, согласие, число гостей, honeypot и CORS. Если ни один канал не настроен — возвращает `503`, а не фейковый успех.
+
+## Где смотреть заявки
+
+- **Telegram:** чат с `@vik_dsh_agent_bot` — каждое сообщение содержит имя, телефон, гостей, дату, формат, бюджет, UTM и страницу.
+- **Почта:** `airdrivwe@ya.ru` — после подключения Resend (нужен API-ключ и подтверждённый домен отправителя).
+- **CRM:** отдельной CRM пока нет. Telegram-чат — это inbox, а не CRM с воронкой и статусами. Для полноценной CRM нужен вебхук Bitrix24/amoCRM: заявка создаёт лид/сделку, там её видно в воронке. Без аккаунта и вебхука CRM не появится.
 
 ## Что важно перед публикацией
 

@@ -173,6 +173,34 @@ async function sendCrm(p) {
   return "crm";
 }
 
+async function sendBitrix(p) {
+  const url = process.env.BITRIX24_WEBHOOK_URL;
+  if (!url) return null;
+
+  const fields = {
+    TITLE: `Заявка с лендинга: ${p.name}, ${p.guests} гостей`,
+    NAME: p.name,
+    PHONE: [{ VALUE: p.phone, VALUE_TYPE: "WORK" }],
+    COMPANY_TITLE: p.company || "",
+    COMMENTS: buildText(p),
+    SOURCE_ID: "WEB",
+    SOURCE_DESCRIPTION: p.page || "planda-ny-landing",
+    UTM_SOURCE: p.utm?.utm_source || "",
+    UTM_MEDIUM: p.utm?.utm_medium || "",
+    UTM_CAMPAIGN: p.utm?.utm_campaign || "",
+  };
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ fields }),
+  });
+  if (!res.ok) throw new Error(`bitrix_${res.status}`);
+  const data = await res.json().catch(() => ({}));
+  if (data.error) throw new Error(`bitrix_${data.error}`);
+  return "bitrix24";
+}
+
 module.exports = async function handler(req, res) {
   setCors(req, res);
 
@@ -237,6 +265,9 @@ module.exports = async function handler(req, res) {
   }
   if (process.env.CRM_WEBHOOK_URL) {
     tasks.push(["crm", sendCrm(payload)]);
+  }
+  if (process.env.BITRIX24_WEBHOOK_URL) {
+    tasks.push(["bitrix24", sendBitrix(payload)]);
   }
 
   if (!tasks.length) {
